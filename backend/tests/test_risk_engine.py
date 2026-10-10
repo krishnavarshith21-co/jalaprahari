@@ -4,17 +4,30 @@ Verify mathematical consistency, normalization, and bounds.
 """
 
 import pytest
-from backend.app.models import DrainLocation
-from backend.app.risk_engine import (
-    assess_drain_risk,
-    normalize_rainfall,
-    normalize_dry_days,
-    normalize_catchment,
-    classify_risk_level,
-    calculate_land_use_score,
-    calculate_condition_score,
-    recommend_action,
-)
+try:
+    from app.models import DrainLocation
+    from app.risk_engine import (
+        assess_drain_risk,
+        normalize_rainfall,
+        normalize_dry_days,
+        normalize_catchment,
+        classify_risk_level,
+        calculate_land_use_score,
+        calculate_condition_score,
+        recommend_action,
+    )
+except ImportError:
+    from backend.app.models import DrainLocation
+    from backend.app.risk_engine import (
+        assess_drain_risk,
+        normalize_rainfall,
+        normalize_dry_days,
+        normalize_catchment,
+        classify_risk_level,
+        calculate_land_use_score,
+        calculate_condition_score,
+        recommend_action,
+    )
 
 @pytest.fixture
 def sample_drain():

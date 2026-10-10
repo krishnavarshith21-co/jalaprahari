@@ -43,6 +43,8 @@ interface DataContextType {
   drainsSortedByRisk: (DrainLocation & { risk: RiskAssessment })[];
 }
 
+const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export function DataProvider({ children }: { children: ReactNode }) {
@@ -75,7 +77,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
 
   // Sync health telemetry with backend API on mount
   useEffect(() => {
-    fetch('/api/health')
+    fetch(`${API_BASE}/api/health`)
       .then(res => res.json())
       .then(data => {
         if (data.status) {
@@ -127,7 +129,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }));
 
     // Sync with backend simulation endpoint
-    fetch('/api/simulate', {
+    fetch(`${API_BASE}/api/simulate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -223,7 +225,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     );
 
     // Persist alert acknowledgement to backend API
-    fetch(`/api/alerts/${alertId}/acknowledge`, {
+    fetch(`${API_BASE}/api/alerts/${alertId}/acknowledge`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ user_name: userName }),
@@ -246,7 +248,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     );
 
     // Persist action status change to backend API
-    fetch(`/api/actions/${actionId}`, {
+    fetch(`${API_BASE}/api/actions/${actionId}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status }),
@@ -266,7 +268,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       )
     );
 
-    fetch(`/api/actions/${actionId}`, {
+    fetch(`${API_BASE}/api/actions/${actionId}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ note }),
@@ -288,7 +290,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       )
     );
 
-    fetch(`/api/actions/${actionId}`, {
+    fetch(`${API_BASE}/api/actions/${actionId}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ plastic_collected: kg }),
@@ -304,7 +306,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       )
     );
 
-    fetch(`/api/actions/${actionId}`, {
+    fetch(`${API_BASE}/api/actions/${actionId}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ assignee }),
@@ -320,7 +322,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     setObservations(prev => [newObs, ...prev]);
 
     // Persist to backend API storage
-    fetch('/api/observations', {
+    fetch(`${API_BASE}/api/observations`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -345,7 +347,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
 
   const triggerDataRefresh = () => {
     const now = new Date().toISOString();
-    return fetch('/api/health/refresh', { method: 'POST' })
+    return fetch(`${API_BASE}/api/health/refresh`, { method: 'POST' })
       .then(res => res.json())
       .then(data => {
         const refreshedTime = data.last_successful_refresh || now;

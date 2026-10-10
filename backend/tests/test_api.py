@@ -4,7 +4,10 @@ JALAPRAHARI — API Endpoint Integration Tests
 
 import pytest
 from fastapi.testclient import TestClient
-from backend.app.main import app
+try:
+    from app.main import app
+except ImportError:
+    from backend.app.main import app
 
 client = TestClient(app)
 
