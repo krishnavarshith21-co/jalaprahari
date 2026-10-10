@@ -326,16 +326,21 @@ export default function CatchmentMapDemo() {
       const y = Math.round(padY + yNorm * innerH);
 
       const assess = getAssessmentForDrain(drain.id);
-      const meta = DRAIN_CARTO_CONFIG[drain.id] || {
+      const defaultMeta: DrainCartoMeta = {
         labelDx: 18,
         labelDy: -8,
-        labelAlign: 'left' as const,
+        labelAlign: 'left',
         hasLeader: false,
+        leaderDx: undefined,
+        leaderDy: undefined,
+        flowPath: `M ${x} ${y} L 520 325`,
+        subBasin: 'Local Catchment Basin',
         terminalX: 520,
         terminalY: 325,
         isVerifiedTrunk: false,
         receivingWaterway: 'Local Regional Sink',
       };
+      const meta: DrainCartoMeta = DRAIN_CARTO_CONFIG[drain.id] || defaultMeta;
 
       return {
         ...drain,
