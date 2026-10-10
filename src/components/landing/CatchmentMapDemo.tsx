@@ -19,6 +19,10 @@ interface DrainCartoMeta {
   leaderDy?: number;
   flowPath: string;
   subBasin: string;
+  terminalX: number;
+  terminalY: number;
+  isVerifiedTrunk: boolean;
+  receivingWaterway: string;
 }
 
 const DRAIN_CARTO_CONFIG: Record<string, DrainCartoMeta> = {
@@ -27,24 +31,36 @@ const DRAIN_CARTO_CONFIG: Record<string, DrainCartoMeta> = {
     labelDy: -8,
     labelAlign: 'left',
     hasLeader: false,
-    flowPath: 'M 202 93 C 220 150, 250 220, 280 289 C 330 300, 380 304, 430 308 C 460 310, 490 315, 520 325',
+    flowPath: 'M 202 93 C 190 70, 175 50, 160 35',
     subBasin: 'Hebbal Northern Watershed',
+    terminalX: 160,
+    terminalY: 35,
+    isVerifiedTrunk: false,
+    receivingWaterway: 'Hebbal Lake & Nagavara System',
   },
   'DR-004': { // Majestic (Western Commercial Hub)
     labelDx: -82,
     labelDy: -8,
     labelAlign: 'right',
     hasLeader: false,
-    flowPath: 'M 130 208 C 170 230, 220 260, 280 289 C 330 300, 380 304, 430 308 C 460 310, 490 315, 520 325',
-    subBasin: 'Vrishabhavathi Western Ridge',
+    flowPath: 'M 130 208 C 105 230, 85 250, 70 270',
+    subBasin: 'Vrishabhavathi Western Crest',
+    terminalX: 70,
+    terminalY: 270,
+    isVerifiedTrunk: false,
+    receivingWaterway: 'Vrishabhavathi River Canal Corridor (West)',
   },
   'DR-006': { // Jayanagar (Southwest Residential Basin)
     labelDx: -82,
     labelDy: 6,
     labelAlign: 'right',
     hasLeader: false,
-    flowPath: 'M 165 309 C 200 305, 240 298, 280 289 C 330 300, 380 304, 430 308 C 460 310, 490 315, 520 325',
+    flowPath: 'M 165 309 C 145 345, 130 385, 120 420',
     subBasin: 'Jayanagar Southwest Sub-Basin',
+    terminalX: 120,
+    terminalY: 420,
+    isVerifiedTrunk: false,
+    receivingWaterway: 'Yediyur / Vrishabhavathi Tributary',
   },
   'DR-002': { // Koramangala (Central Valley Market)
     labelDx: 18,
@@ -54,7 +70,11 @@ const DRAIN_CARTO_CONFIG: Record<string, DrainCartoMeta> = {
     leaderDx: 16,
     leaderDy: -12,
     flowPath: 'M 280 289 C 330 300, 380 304, 430 308 C 460 310, 490 315, 520 325',
-    subBasin: 'Koramangala-Challaghatta Valley',
+    subBasin: 'Koramangala-Challaghatta Primary Trunk',
+    terminalX: 520,
+    terminalY: 325,
+    isVerifiedTrunk: true,
+    receivingWaterway: 'Bellandur Lake (via K-C Main Rajakaluve)',
   },
   'DR-005': { // Bellandur (Direct Lake Outfall Fringe)
     labelDx: 18,
@@ -63,32 +83,48 @@ const DRAIN_CARTO_CONFIG: Record<string, DrainCartoMeta> = {
     hasLeader: true,
     leaderDx: 16,
     leaderDy: -10,
-    flowPath: 'M 426 307 C 450 310, 480 315, 520 325',
-    subBasin: 'Bellandur Lake Depressional Basin',
+    flowPath: 'M 426 307 C 460 315, 520 325, 600 350 C 640 365, 680 375, 700 380',
+    subBasin: 'Bellandur-Varthur Spillway Cascade',
+    terminalX: 700,
+    terminalY: 380,
+    isVerifiedTrunk: true,
+    receivingWaterway: 'Varthur Lake (Spillway Cascade)',
   },
   'DR-001': { // Sarjapur Road (Southeast Feeder Corridor)
     labelDx: 18,
     labelDy: 10,
     labelAlign: 'left',
     hasLeader: false,
-    flowPath: 'M 450 339 C 455 325, 480 320, 520 325',
-    subBasin: 'Sarjapur Southeast Sub-Basin',
+    flowPath: 'M 450 339 C 470 330, 495 328, 520 325',
+    subBasin: 'Sarjapur-Bellandur South Corridor',
+    terminalX: 520,
+    terminalY: 325,
+    isVerifiedTrunk: true,
+    receivingWaterway: 'Bellandur Lake (Southern Wetland Inlet)',
   },
   'DR-003': { // Whitefield (East IT Valley Inlet)
     labelDx: -82,
     labelDy: -8,
     labelAlign: 'right',
     hasLeader: false,
-    flowPath: 'M 634 222 C 600 250, 560 290, 520 325',
+    flowPath: 'M 634 222 C 650 235, 665 245, 680 260',
     subBasin: 'Whitefield Eastern Sub-Basin',
+    terminalX: 680,
+    terminalY: 260,
+    isVerifiedTrunk: false,
+    receivingWaterway: 'Whitefield Lake / Varthur Downstream Wetlands',
   },
   'DR-008': { // Electronic City (Southern Industrial Basin)
     labelDx: 18,
     labelDy: -8,
     labelAlign: 'left',
     hasLeader: false,
-    flowPath: 'M 381 465 C 400 410, 430 360, 450 339 C 455 325, 480 320, 520 325',
-    subBasin: 'Electronic City Southern Valley',
+    flowPath: 'M 381 465 C 380 485, 380 505, 380 520',
+    subBasin: 'Electronic City Southern Corridor',
+    terminalX: 380,
+    terminalY: 520,
+    isVerifiedTrunk: false,
+    receivingWaterway: 'Rayasandra Lake & Hebbagodi Chain',
   },
 };
 
@@ -295,8 +331,10 @@ export default function CatchmentMapDemo() {
         labelDy: -8,
         labelAlign: 'left' as const,
         hasLeader: false,
-        flowPath: `M ${x} ${y} L 520 325`,
-        subBasin: 'South-East Catchment',
+        terminalX: 520,
+        terminalY: 325,
+        isVerifiedTrunk: false,
+        receivingWaterway: 'Local Regional Sink',
       };
 
       return {
@@ -311,6 +349,10 @@ export default function CatchmentMapDemo() {
         leaderDy: meta.leaderDy,
         flowPath: meta.flowPath,
         subBasin: meta.subBasin,
+        terminalX: meta.terminalX,
+        terminalY: meta.terminalY,
+        isVerifiedTrunk: meta.isVerifiedTrunk,
+        receivingWaterway: meta.receivingWaterway,
         assessment: assess,
       };
     });
@@ -770,22 +812,22 @@ export default function CatchmentMapDemo() {
                     <g className="carto-channels">
                       {/* Background Inactive Network */}
                       <g fill="none" strokeLinecap="round">
-                        {/* Northern Trunk */}
-                        <path d="M 202 93 C 220 150, 250 220, 280 289" stroke={cartoTheme.channelSecondary} strokeWidth="2.5" />
-                        {/* Western Majestic to Koramangala Trunk */}
-                        <path d="M 130 208 C 170 230, 220 260, 280 289" stroke={cartoTheme.channelPrimary} strokeWidth="3.4" />
-                        {/* Jayanagar Tributary Branch */}
-                        <path d="M 165 309 C 200 305, 240 298, 280 289" stroke={cartoTheme.channelSecondary} strokeWidth="2.2" />
-                        {/* Central Koramangala Trunk to Bellandur Confluence */}
+                        {/* 1. Verified Primary Trunk: Koramangala Outfall to Bellandur Confluence */}
                         <path d="M 280 289 C 330 300, 380 304, 430 308 C 460 310, 490 315, 520 325" stroke={cartoTheme.channelPrimary} strokeWidth="3.6" />
-                        {/* Bellandur Feeder */}
-                        <path d="M 426 307 C 450 310, 480 315, 520 325" stroke={cartoTheme.channelSecondary} strokeWidth="2.2" />
-                        {/* Sarjapur Tributary Branch */}
-                        <path d="M 450 339 C 455 325, 480 320, 520 325" stroke={cartoTheme.channelSecondary} strokeWidth="2.2" />
-                        {/* Electronic City Southern Main Collector */}
-                        <path d="M 381 465 C 400 410, 430 360, 450 339" stroke={cartoTheme.channelSecondary} strokeWidth="2.5" />
-                        {/* Whitefield Eastern Catchment Feeder */}
-                        <path d="M 634 222 C 600 250, 560 290, 520 325" stroke={cartoTheme.channelSecondary} strokeWidth="2.4" />
+                        {/* 2. Verified Overflow Cascade: Bellandur Lake to Varthur Lake */}
+                        <path d="M 520 325 C 570 340, 630 360, 700 380" stroke={cartoTheme.channelPrimary} strokeWidth="3.2" />
+                        {/* 3. Sarjapur Feeder into Bellandur Southern Reach */}
+                        <path d="M 450 339 C 470 330, 495 328, 520 325" stroke={cartoTheme.channelSecondary} strokeWidth="2.2" strokeDasharray="4 2" />
+                        {/* 4. Vrishabhavathi Western Canal (Majestic Outflow - Separate Watershed) */}
+                        <path d="M 130 208 C 105 230, 85 250, 70 270" stroke={cartoTheme.channelSecondary} strokeWidth="2.4" strokeDasharray="5 3" />
+                        {/* 5. Jayanagar Southwest Sub-Basin Feeder */}
+                        <path d="M 165 309 C 145 345, 130 385, 120 420" stroke={cartoTheme.channelSecondary} strokeWidth="2.2" strokeDasharray="5 3" />
+                        {/* 6. Hebbal Northern Watershed Conduit */}
+                        <path d="M 202 93 C 190 70, 175 50, 160 35" stroke={cartoTheme.channelSecondary} strokeWidth="2.2" strokeDasharray="5 3" />
+                        {/* 7. Electronic City Southern Industrial Conduit */}
+                        <path d="M 381 465 C 380 485, 380 505, 380 520" stroke={cartoTheme.channelSecondary} strokeWidth="2.2" strokeDasharray="5 3" />
+                        {/* 8. Whitefield Eastern Sub-Basin Feeder */}
+                        <path d="M 634 222 C 650 235, 665 245, 680 260" stroke={cartoTheme.channelSecondary} strokeWidth="2.2" strokeDasharray="5 3" />
                       </g>
 
                       {/* Downhill Directional Flow Chevrons along Conduits */}
@@ -793,8 +835,9 @@ export default function CatchmentMapDemo() {
                         <polygon points="340,301 346,303 340,305" />
                         <polygon points="390,305 396,307 390,309" />
                         <polygon points="450,311 456,313 450,315" />
-                        <polygon points="240,210 245,214 239,216" />
-                        <polygon points="420,380 423,374 427,379" />
+                        <polygon points="600,350 606,352 600,354" />
+                        <polygon points="95,245 92,251 98,249" />
+                        <polygon points="185,55 180,50 186,47" />
                       </g>
 
                       {/* Conduit Junction Vault Nodes */}
@@ -802,11 +845,12 @@ export default function CatchmentMapDemo() {
                         <circle cx="280" cy="289" r="4" />
                         <circle cx="430" cy="308" r="3.5" />
                         <circle cx="450" cy="339" r="3.5" />
+                        <circle cx="130" cy="208" r="3.5" />
                       </g>
                     </g>
                   )}
 
-                  {/* 5. Receiving Waterways & Lake Sink (Layer: waterbodies) */}
+                  {/* 5. Receiving Waterways & Lake Sinks (Layer: waterbodies) */}
                   {activeLayers.waterbodies && (
                     <g className="carto-waterbodies">
                       {/* Bellandur Lake Wetland Body */}
@@ -830,13 +874,35 @@ export default function CatchmentMapDemo() {
 
                       {/* Varthur Outfall Wetland Outlet (Continuing eastward to Pinakini) */}
                       <path
-                        d="M 590 325 C 620 320, 660 330, 710 345 L 710 365 C 660 355, 615 350, 575 365 Z"
+                        d="M 640 355 C 665 345, 715 355, 745 375 C 735 400, 690 410, 660 395 Z"
+                        fill="url(#recipientLakeGrad)"
+                        stroke={cartoTheme.lakeStroke}
+                        strokeWidth="1.4"
+                      />
+                      <text x="700" y="380" fontSize="7.5" fontFamily="var(--font-mono)" fill={cartoTheme.lakeSub} fontWeight="700">
+                        VARTHUR LAKE
+                      </text>
+
+                      {/* Hebbal Lake Sink (Northern Valley) */}
+                      <path
+                        d="M 135 20 C 155 12, 185 22, 175 42 C 155 48, 130 38, 135 20 Z"
                         fill="url(#recipientLakeGrad)"
                         stroke={cartoTheme.lakeStroke}
                         strokeWidth="1.2"
                       />
-                      <text x="650" y="348" fontSize="7" fontFamily="var(--font-mono)" fill={cartoTheme.lakeSub} fontWeight="600">
-                        VARTHUR OUTLET &gt;&gt;
+                      <text x="155" y="32" fontSize="6.5" fontFamily="var(--font-mono)" fill={cartoTheme.lakeSub} fontWeight="600" textAnchor="middle">
+                        HEBBAL LAKE
+                      </text>
+
+                      {/* Whitefield Wetland Basin */}
+                      <path
+                        d="M 660 245 C 675 235, 705 245, 700 268 C 685 275, 655 265, 660 245 Z"
+                        fill="url(#recipientLakeGrad)"
+                        stroke={cartoTheme.lakeStroke}
+                        strokeWidth="1.2"
+                      />
+                      <text x="680" y="258" fontSize="6" fontFamily="var(--font-mono)" fill={cartoTheme.lakeSub} fontWeight="600" textAnchor="middle">
+                        WHITEFIELD
                       </text>
                     </g>
                   )}
@@ -861,9 +927,9 @@ export default function CatchmentMapDemo() {
                         strokeDasharray="6 4"
                         className="carto-active-stream-flow"
                       />
-                      {/* Confluence Inflow Terminal Node Indicator */}
-                      <circle cx="520" cy="325" r="5" fill={cartoTheme.activeTraceLine} />
-                      <circle cx="520" cy="325" r="9" fill="none" stroke={cartoTheme.activeTraceLine} strokeWidth="1.2" strokeDasharray="2 2" />
+                      {/* Confluence Inflow Terminal Node Indicator (Dynamic based on selected basin sink) */}
+                      <circle cx={selectedNode.terminalX || 520} cy={selectedNode.terminalY || 325} r="5" fill={cartoTheme.activeTraceLine} />
+                      <circle cx={selectedNode.terminalX || 520} cy={selectedNode.terminalY || 325} r="9" fill="none" stroke={cartoTheme.activeTraceLine} strokeWidth="1.2" strokeDasharray="2 2" />
                     </g>
                   )}
 
@@ -1161,10 +1227,46 @@ export default function CatchmentMapDemo() {
                   <span className={`risk-badge__category risk-badge__category--${selectedAssessment?.riskLevel}`}>
                     {selectedAssessment?.riskLevel.toUpperCase().replace('-', ' ')} RISK
                   </span>
+                  <span style={{ fontSize: '0.625rem', color: 'var(--color-text-secondary)', display: 'block', marginTop: 2, textAlign: 'right' }}>
+                    Relative Priority Index
+                  </span>
                 </div>
               </div>
 
-              {/* 2. Relevant Event Context */}
+              {/* 2. Hydrological Connectivity & Watershed Basin Provenance */}
+              <div style={{
+                background: isDark ? 'rgba(30, 42, 34, 0.45)' : 'rgba(235, 243, 237, 0.7)',
+                border: '1px solid var(--color-border)',
+                borderRadius: 'var(--radius-md)',
+                padding: '10px 14px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 6,
+                fontSize: '0.75rem'
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontWeight: 700, fontSize: '0.688rem', textTransform: 'uppercase', color: 'var(--color-text-secondary)' }}>
+                    Hydrological Watershed
+                  </span>
+                  {selectedDrain.hydrologicalConnectionVerified ? (
+                    <span style={{ color: 'var(--color-brass)', fontWeight: 700, fontSize: '0.688rem', display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <CheckCircle size={11} /> Verified Trunk
+                    </span>
+                  ) : (
+                    <span style={{ color: 'var(--color-text-secondary)', fontSize: '0.688rem' }}>
+                      DEM Sub-Basin Feeder
+                    </span>
+                  )}
+                </div>
+                <div style={{ fontWeight: 700, color: 'var(--color-text)' }}>
+                  {selectedDrain.catchmentName || 'Koramangala-Challaghatta (K-C) Valley'}
+                </div>
+                <div style={{ fontSize: '0.688rem', color: 'var(--color-text-secondary)' }}>
+                  Recipient Sink: <strong style={{ color: selectedDrain.hydrologicalConnectionVerified ? 'var(--color-brass)' : 'var(--color-text)' }}>{selectedDrain.receivingWaterbody || 'Bellandur Lake'}</strong>
+                </div>
+              </div>
+
+              {/* 3. Relevant Event Context */}
               <div className="dossier-event-context">
                 <div className="context-box">
                   <div className="context-box__icon">

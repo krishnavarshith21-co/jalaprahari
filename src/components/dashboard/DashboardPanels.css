@@ -1076,3 +1076,190 @@
 .dark .log-entry {
   border-bottom: 1px solid var(--border-subtle);
 }
+
+/* ─── Premium GIS Cartography & Marker Styles ─── */
+.carto-marker-wrapper {
+  background: transparent !important;
+  border: none !important;
+}
+
+.carto-marker-pin {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 7px 3px 4px;
+  background: rgba(22, 30, 26, 0.92);
+  border: 1px solid rgba(208, 178, 122, 0.4);
+  border-radius: 9999px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: var(--font-sans, system-ui, sans-serif);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.carto-marker-pin:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.55);
+  border-color: #D0B27A;
+}
+
+.carto-marker-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  flex-shrink: 0;
+}
+
+.carto-marker-label {
+  font-size: 0.688rem;
+  font-weight: 700;
+  color: #F1EBDD;
+  letter-spacing: 0.02em;
+}
+
+.carto-marker-score {
+  font-size: 0.688rem;
+  font-weight: 800;
+  padding: 1px 5px;
+  border-radius: 9999px;
+  color: #FFFFFF;
+}
+
+.carto-marker-pin--selected {
+  border: 1.5px solid #D0B27A !important;
+  background: rgba(30, 42, 34, 0.98) !important;
+  box-shadow: 0 0 0 3px rgba(208, 178, 122, 0.35), 0 8px 20px rgba(0, 0, 0, 0.6) !important;
+  transform: scale(1.12);
+  animation: reticlePulse 2s infinite ease-in-out;
+}
+
+@keyframes reticlePulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(208, 178, 122, 0.6), 0 4px 12px rgba(0, 0, 0, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(208, 178, 122, 0), 0 4px 12px rgba(0, 0, 0, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(208, 178, 122, 0), 0 4px 12px rgba(0, 0, 0, 0.5);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carto-marker-pin--selected {
+    animation: none !important;
+  }
+  .carto-marker-pin {
+    transition: none !important;
+  }
+}
+
+/* Light Theme Override for Markers */
+[data-theme="light"] .carto-marker-pin {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(48, 55, 44, 0.25);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .carto-marker-label {
+  color: #1B2219;
+}
+
+[data-theme="light"] .carto-marker-pin--selected {
+  border-color: #8C6A3E !important;
+  background: #FFFFFF !important;
+  box-shadow: 0 0 0 3px rgba(140, 106, 62, 0.25), 0 6px 14px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* In-Map Floating Tools HUD */
+.map-hud-cluster {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.map-search-box {
+  display: flex;
+  align-items: center;
+  background: var(--color-surface, #161E1A);
+  border: 1px solid var(--color-border, #28372D);
+  border-radius: var(--radius-md, 6px);
+  padding: 4px 10px;
+  gap: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  font-size: 0.75rem;
+}
+
+.map-search-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--color-text, #F1EBDD);
+  font-size: 0.75rem;
+  width: 140px;
+}
+
+.map-search-input::placeholder {
+  color: var(--color-text-secondary, #92998D);
+}
+
+.map-hud-btn {
+  background: var(--color-surface, #161E1A);
+  border: 1px solid var(--color-border, #28372D);
+  border-radius: var(--radius-md, 6px);
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text, #F1EBDD);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: all 0.15s ease;
+}
+
+.map-hud-btn:hover {
+  border-color: var(--accent-brass, #D0B27A);
+  color: var(--accent-brass, #D0B27A);
+}
+
+.map-layer-drawer {
+  position: absolute;
+  top: 50px;
+  left: 14px;
+  z-index: 1001;
+  background: var(--color-surface, #161E1A);
+  border: 1px solid var(--color-border, #28372D);
+  border-radius: var(--radius-md, 6px);
+  padding: 12px 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.75rem;
+  min-width: 200px;
+}
+
+.map-layer-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+
+.map-layer-item label {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+

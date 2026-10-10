@@ -27,6 +27,11 @@ class DrainLocation(BaseModel):
     drainage_capacity: str = Field(...)
     last_inspection: str = Field(...)
     condition: DrainCondition = "moderate"
+    catchment_id: Optional[str] = None
+    catchment_name: Optional[str] = None
+    sub_basin: Optional[str] = None
+    receiving_waterbody: Optional[str] = None
+    hydrological_connection_verified: Optional[bool] = False
 
 class RiskFactor(BaseModel):
     name: str

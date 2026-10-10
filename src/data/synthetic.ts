@@ -11,9 +11,11 @@ import type {
   DrainLocation, RiskAssessment, WeatherEvent, Alert,
   InterventionAction, Observation, MonitoringHealth, RiskFactor
 } from '../types';
+import { CANONICAL_DRAIN_GEO_MAP } from './geospatial';
+export * from './geospatial';
 
-// ── Synthetic Drain Locations (Illustrative) ──
-export const syntheticDrains: DrainLocation[] = [
+// ── Base Drain Definitions with Municipal Landmark Coordinates ──
+const baseDrains: DrainLocation[] = [
   {
     id: 'DR-001',
     name: 'Sarjapur Road Junction Drain',
@@ -119,6 +121,12 @@ export const syntheticDrains: DrainLocation[] = [
     condition: 'moderate',
   },
 ];
+ 
+// ── Canonical Synthetic Drains (Enriched with Watershed & Network Provenance) ──
+export const syntheticDrains: DrainLocation[] = baseDrains.map(drain => ({
+  ...drain,
+  ...(CANONICAL_DRAIN_GEO_MAP[drain.id] || {}),
+}));
 
 // ── Risk Factor Generator ──
 export function calculateLandUseScore(landUses: string[]): number {

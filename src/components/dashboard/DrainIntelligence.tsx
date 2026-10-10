@@ -126,17 +126,26 @@ export default function DrainIntelligence() {
             <h2 style={{ fontSize: '1.75rem', fontFamily: 'var(--font-heading)', marginTop: '4px' }}>
               {selectedDrain.name}
             </h2>
+            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginTop: '6px', fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>
+              <span>Watershed: <strong style={{ color: 'var(--color-text-heading)' }}>{selectedDrain.catchmentName || 'Koramangala-Challaghatta (K-C) Valley'}</strong></span>
+              <span>Sub-Basin: <strong style={{ color: 'var(--color-text-heading)' }}>{selectedDrain.subBasin || 'Primary Trunk Corridor'}</strong></span>
+              <span>Receiving Sink: <strong style={{ color: selectedDrain.hydrologicalConnectionVerified ? 'var(--color-brass)' : 'var(--color-text-heading)' }}>{selectedDrain.receivingWaterbody || 'Bellandur Lake'}</strong></span>
+              <span>Network: <strong style={{ color: selectedDrain.hydrologicalConnectionVerified ? 'var(--accent-brass)' : 'inherit' }}>{selectedDrain.hydrologicalConnectionVerified ? '✓ Verified Trunk Canal' : 'DEM Sub-Basin Feeder'}</strong></span>
+            </div>
           </div>
 
           <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: '16px' }}>
             <div>
-              <span style={{ fontSize: '0.688rem', textTransform: 'uppercase', color: 'var(--color-text-secondary)', letterSpacing: '0.05em' }}>
-                Composite Risk Index
+              <span style={{ fontSize: '0.688rem', textTransform: 'uppercase', color: 'var(--color-text-secondary)', letterSpacing: '0.05em', display: 'block' }}>
+                Relative Priority Index
               </span>
               <div style={{ fontSize: '2.5rem', fontWeight: 700, fontFamily: 'var(--font-body)', color: 'var(--color-text-heading)', lineHeight: 1 }}>
                 {selectedAssessment.riskIndex}
                 <span style={{ fontSize: '1rem', color: 'var(--color-text-secondary)', fontWeight: 500 }}> / 100</span>
               </div>
+              <span style={{ fontSize: '0.625rem', color: 'var(--color-text-secondary)', display: 'block', marginTop: 2 }}>
+                Relative heuristic ranking
+              </span>
             </div>
           </div>
         </div>

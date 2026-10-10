@@ -2,6 +2,25 @@
 
 export type RiskLevel = 'low' | 'moderate' | 'high' | 'very-high';
 
+export interface GeospatialProvenance {
+  coordinateSource: string;
+  verificationStatus: 'verified-monitored-inlet' | 'provisional-survey' | 'illustrative-demo';
+  networkTopology: 'verified-trunk-conduit' | 'modeled-feeder' | 'illustrative-local-flow';
+  receivingWaterway: string;
+  elevationM?: number;
+  notes: string;
+}
+
+export interface CatchmentInfo {
+  id: string;
+  name: string;
+  basinType: 'primary-monitored-valley' | 'secondary-watershed' | 'sub-catchment';
+  receivingWaterbody: string;
+  hydrologicalConnectionVerified: boolean;
+  boundaryProvenance: 'dem-valley-delineation' | 'watershed-atlas-reference' | 'illustrative-corridor-boundary';
+  elevationRangeM: [number, number];
+}
+
 export interface DrainLocation {
   id: string;
   name: string;
@@ -14,6 +33,12 @@ export interface DrainLocation {
   drainageCapacity: string;
   lastInspection: string;
   condition: 'good' | 'moderate' | 'poor' | 'critical';
+  catchmentId?: string;
+  catchmentName?: string;
+  subBasin?: string;
+  receivingWaterbody?: string;
+  hydrologicalConnectionVerified?: boolean;
+  provenance?: GeospatialProvenance;
 }
 
 export interface RiskAssessment {
